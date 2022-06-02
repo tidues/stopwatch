@@ -17,7 +17,7 @@ It works like a stopwatch. An example:
         time.sleep(gaps[i])
         sw.lap('round' + str(i))  # lap the stopwatch with a name
 
-    print(sw.getHist(0))  # get all lap info as absolute times
-    print(sw.getHist(1))  # get all lap info as times relative to the starting time
-    print(sw.getHist(2))  # get all lap info as durations
+    print(sw.info(0))  # get all lap info as absolute times
+    print(sw.info(1))  # get all lap info as times relative to the starting time
+    print(sw.info(2))  # get all lap info as durations
       

@@ -45,9 +45,9 @@ def main():
     for i in range(iters):
         time.sleep(gaps[i])
         sw.lap('round' + str(i))
-    print(sw.getHist(0))
-    print(sw.getHist(1))
-    print(sw.getHist(2))
+    print(sw.info(0))
+    print(sw.info(1))
+    print(sw.info(2))
 
 
 if __name__ == '__main__':
