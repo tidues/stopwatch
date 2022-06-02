@@ -1,6 +1,6 @@
 # A Simple Stopwatch for Timing Python Code
 
-It works like a stop watch. An example:
+It works like a stopwatch. An example:
 
     from stopwatch import Stopwatch
     import numpy as np
