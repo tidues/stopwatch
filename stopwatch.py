@@ -8,8 +8,16 @@ def dtstr():
     return now.strftime("%m%d%Y%H%M%S"), now
 
 
+class TimeLimitException(Exception):
+    def __init__(self, message="Out of time limit"):
+        self.message = message
+        super().__init__(self.message)
+
+
 class Stopwatch:
-    def __init__(self, name='stopwatch', digits=None, on=True):
+    def __init__(self, name='stopwatch', digits=None, on=True, timebgt=None, raise_err=False):
+        self.timebgt = timebgt
+        self.raise_err = raise_err
         self.name = name
         self.on = on
         self.hist = {}
@@ -31,7 +39,13 @@ class Stopwatch:
         if name is None:
             name = 'lap' + str(self.lap_idx)
         self.hist[name] = time.time()
-        return self.hist[name]
+        if self.timebgt is None:
+            res = self.hist[name]
+        else:
+            res = self.timebgt - (self.hist[name] - self.hist['start'])
+            if res <= 0 and self.raise_err:
+                raise TimeLimitException
+        return res
 
     # histType: 0: absolute times; 1: relative times; 2: time lapse
     def info(self, histType=1):
