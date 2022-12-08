@@ -70,7 +70,7 @@ class Stopwatch:
 
     # histType: 0: absolute times; 1: relative times; 2: time lapse
     # the first two are dictionary of lists; 2 is a dictionary
-    def info(self, histType=1):
+    def info(self, histType=1, withKey=True):
         if not self.on:
             return 0
         if histType == 0:
@@ -95,6 +95,9 @@ class Stopwatch:
                 res = {keys[i]: round(self.hist[keys[i]][1] - self.hist[keys[i]][0], self.digits) for i in range(len(keys))}
             else:
                 res = {keys[i]: self.hist[keys[i]][1] - self.hist[keys[i]][0] for i in range(len(keys))}
+
+        if withKey is False:
+            res = list(res.values())
         return res
 
     # get total time
