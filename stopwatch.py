@@ -33,7 +33,7 @@ class Stopwatch:
         else:
             self.pfix = name
         if start:
-            self.start()
+            return self.start()
 
     def start(self):
         if not self.on:
@@ -41,9 +41,9 @@ class Stopwatch:
         self.lap_idx += 1
         name = self.pfix + str(self.lap_idx)
         self.hist[name] = [time.time(), None]
-        return self.hist[name]
+        return self.hist[name][0]
 
-    def lap(self):
+    def lap(self, lapname=None):
         if not self.on:
             return 0
         # check if there exists half-done lap
@@ -56,11 +56,14 @@ class Stopwatch:
         else:
             # lap-lap mode
             self.lap_idx += 1
-            name = self.pfix + str(self.lap_idx)
+            if lapname is None:
+                name = self.pfix + str(self.lap_idx)
+            else:
+                name = lapname
             self.hist[name] = [self.hist[key][1], tmptime]
         # self.hist[name] = time.time()
         if self.timebgt is None:
-            res = self.hist[name]
+            res = tmptime
         else:
             stime = list(self.hist.values())[0][0]
             res = self.timebgt - (tmptime - stime)
