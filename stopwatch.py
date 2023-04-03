@@ -52,7 +52,13 @@ class Stopwatch:
         if self.hist[key][1] is None:
             # start-lap mode
             self.hist[key][1] = tmptime
-            name = key
+            if lapname is None:
+                name = key
+            else:
+                name = lapname
+                # update key name
+                self.hist[name] = self.hist[key]
+                del self.hist[key]
         else:
             # lap-lap mode
             self.lap_idx += 1
@@ -118,7 +124,6 @@ def main():
     sw = Stopwatch()
     iters = 6
     gaps = np.random.random(iters) * 5
-    print(gaps)
     # sw.init(start=True, name='round')
     sw.init(start=False)
     for i in range(iters):
@@ -126,9 +131,9 @@ def main():
         sw.start()
         time.sleep(gaps[i])
         sw.lap()
-    print(sw.info(0))
-    print(sw.info(1))
-    print(sw.info(2))
+    print('info0:', sw.info(0))
+    print('info1:', sw.info(1))
+    print('info2:', sw.info(2))
 
 
 if __name__ == '__main__':
