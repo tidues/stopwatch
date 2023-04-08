@@ -1,11 +1,21 @@
 import time
 from datetime import datetime
+from dateutil import tz
 
 
 # get datetime string
-def dtstr():
-    now = datetime.now()
-    return now.strftime("%m%d%Y%H%M%S"), now
+# fmt: format 'short' or 'long'
+def dtstr(local=False, fmt='short'):
+    if fmt == 'short':
+        fmt_str = "%m%d%Y%H%M%S"
+    else:
+        fmt_str = "%Y-%m-%d %H:%M:%S"
+    if local:
+        zone = tz.tzlocal()
+    else:
+        zone = tz.tzutc()
+    now = datetime.now(zone)
+    return now.strftime(fmt_str), now
 
 
 class TimeLimitException(Exception):
