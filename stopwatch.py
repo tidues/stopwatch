@@ -25,18 +25,22 @@ class TimeLimitException(Exception):
 
 
 class Stopwatch:
-    def __init__(self, digits=None, on=True, timebgt=None, raise_err=False):
+    def __init__(self, digits=None, on=True, timebgt=None, raise_err=False, start=False, name=None):
         self.timebgt = timebgt
         self.raise_err = raise_err
         self.on = on
+        self.stime = None
         self.hist = {}
         self.digits = digits
         self.lap_idx = 0
+        if start:
+            self.init(start=True, name=name)
 
     def init(self, start=False, name=None):
         if not self.on:
             return 0
         self.lap_idx = 0
+        self.stime = None
         self.hist = {}
         if name is None:
             self.pfix = 'lap'
@@ -50,10 +54,12 @@ class Stopwatch:
             return 0
         self.lap_idx += 1
         name = self.pfix + str(self.lap_idx)
-        self.hist[name] = [time.time(), None]
-        return self.hist[name][0]
+        self.stime = time.time()
+        self.hist[name] = [self.stime, None]
+        return self.hist[name]
 
-    def lap(self, lapname=None):
+    # res_type: 0[default]: current time; 1: lap_time; 2: time from start; 3: current history
+    def lap(self, res_type=0):
         if not self.on:
             return 0
         # check if there exists half-done lap
@@ -79,7 +85,14 @@ class Stopwatch:
             self.hist[name] = [self.hist[key][1], tmptime]
         # self.hist[name] = time.time()
         if self.timebgt is None:
-            res = tmptime
+            if res_type == 1:
+                res = self.hist[name][1] - self.hist[name][0]
+            elif res_type == 2:
+                res = self.hist[name][1] - self.stime
+            elif res_type == 3:
+                res = self.hist[name]
+            else:
+                res = tmptime
         else:
             stime = list(self.hist.values())[0][0]
             res = self.timebgt - (tmptime - stime)
@@ -100,7 +113,7 @@ class Stopwatch:
             else:
                 res = self.hist
         elif histType == 1:
-            stime = list(self.hist.values())[0][0]
+            stime = self.stime
             keys = list(self.hist)
             if self.digits is not None:
                 res = {keys[i]: [round(self.hist[keys[i]][0] - stime, self.digits), 
