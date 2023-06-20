@@ -59,7 +59,7 @@ class Stopwatch:
         return self.hist[name]
 
     # res_type: 0[default]: current time; 1: lap_time; 2: time from start; 3: current history
-    def lap(self, res_type=0):
+    def lap(self, res_type=0, lapname=None):
         if not self.on:
             return 0
         # check if there exists half-done lap
